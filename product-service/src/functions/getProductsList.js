@@ -12,6 +12,8 @@ const scanProducts = async () => {
 module.exports.getProductsList = async (event) => {
 
     try {
+        console.log('Gets all products');
+
         const productItems = await scanProducts();
 
         return {

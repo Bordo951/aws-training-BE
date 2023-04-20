@@ -15,6 +15,8 @@ module.exports.getProductsById = async (event) => {
     try {
         const { productId } = event.pathParameters
 
+        console.log(`Gets product by id=${productId}`);
+
         const product = await queryProducts(productId);
 
         if (!product) {

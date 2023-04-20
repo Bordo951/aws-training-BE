@@ -40,6 +40,9 @@ module.exports.createProduct = async (event, context, callback) => {
     const productId = uuidv4();
 
     try {
+        console.log(`createProduct: create product item with id=${productId}, title=${title}, description=${description}, price=${price}`);
+        console.log(`createProduct: create stock item with product_id=${productId}, count=${count}`);
+
         validateInputData(inputDataParams);
 
         await dynamo.transactWrite({
