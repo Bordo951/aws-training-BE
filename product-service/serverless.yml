@@ -24,8 +24,18 @@ provider:
   name: aws
   runtime: nodejs12.x
   profile: my-profile
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:975555951614:table/*"
 
-# you can overwrite defaults here
+  # you can overwrite defaults here
   stage: dev
   region: us-east-1
 
@@ -62,6 +72,9 @@ provider:
 functions:
   getProductsList:
     handler: src/functions/getProductsList.getProductsList
+    environment:
+      PRODUCTS_TABLE: products
+      STOCKS_TABLE: stocks
     events:
       - http:
           path: products
@@ -69,6 +82,9 @@ functions:
           cors: true
   getProductsById:
     handler: src/functions/getProductsById.getProductsById
+    environment:
+      PRODUCTS_TABLE: products
+      STOCKS_TABLE: stocks
     events:
       - http:
            path: products/{productId}
@@ -78,6 +94,18 @@ functions:
              parameters:
                paths:
                  productId: true
+  createProduct:
+    handler: src/functions/createProduct.createProduct
+    environment:
+      PRODUCTS_TABLE: products
+      STOCKS_TABLE: stocks
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+          #bodyType: 'Product'
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
